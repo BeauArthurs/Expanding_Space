@@ -21,14 +21,7 @@ public class GUIClass : MonoBehaviour
 		"Wheel: zoom in/out\n" +
 		"Click on object to get info\n" +
 		"Double click to focus\n";
-	private const string controlsMessage2 = 
-        "Press Del to remove a Space Craft.\n" +
-		"Press + - spacebar to manage time.";
-	private const string strongGravityMessage = "One of your Space Crafts is approaching a strong gravity field. When this happens, time will scale accordingly";
-	private bool strongGravityMessageQueued = false;
-	private const string gravityMultiplierMessage = "This sets the strength of the Gravitational field of the planets. If you press Set " +
-		"all objectives will reset and all Space Crafts will be removed.";
-	bool gravityMultiplierMessageIsDisplayed = false;
+
 
 	[System.Flags]
 	enum Buttons
@@ -55,7 +48,6 @@ public class GUIClass : MonoBehaviour
 	private float y1 = 5;
 	private float y2 = 25;
 	private CamController camCon;
-	private SpaceCraft selectedSc;
 	private List<Planet> planetList;
 	private AuxOrbit auxOrbit;
 	GUIStyle style = new GUIStyle ();
@@ -97,22 +89,6 @@ public class GUIClass : MonoBehaviour
 		}
 /******************************************************************************************************************/
 		gravityLevel0 = Scales.GravityLevel.normal;
-		foreach (SpaceCraft sc in SpaceCraft.spaceCraftList) {
-			if (sc.sco.gravityLevel > gravityLevel0)
-				gravityLevel0 = sc.sco.gravityLevel;
-
-			if (sc.IsSelected == true) {
-				if (selectedSc != null && selectedSc != sc)
-					selectedSc.isCourseCorrecting = false;
-
-				selectedSc = sc;
-			}
-		}
-
-		if (gravityLevel0 != Scales.GravityLevel.normal && strongGravityMessageQueued == false) {
-			strongGravityMessageQueued = true;
-			messageQueue.Enqueue (strongGravityMessage);
-		}
 
 		switch (gravityLevel0) {
 		case Scales.GravityLevel.normal:
@@ -176,7 +152,6 @@ public class GUIClass : MonoBehaviour
 			}
 			if (GUI.Button (new Rect (Screen.width - width - offSetX, y1 + 2 * offSetY, width, y2), "Controls")) {
 				messageQueue.Enqueue (controlsMessage1);
-				messageQueue.Enqueue (controlsMessage2);
 				buttonStatus = 0;
 			}
 		}
@@ -236,7 +211,6 @@ public class GUIClass : MonoBehaviour
 
 		offY += offSetY;
 		if (GUI.Button (new Rect (offX, y1 + 3 * offSetY, 170, 30), "Launch " + label)) {
-			MissileManager.instance.LaunchSpaceCraft (hScrollbarSpeed, hScrollbarDirection, label);
 			buttonStatus = 0;
 
 			hScrollbarDirection = 0;
@@ -260,18 +234,13 @@ public class GUIClass : MonoBehaviour
 		GUI.Label (new Rect (offX + width, y1 + offSetY - 3, 140, 30), labelDirection);
 
 		offY += offSetY;
-		hScrollbarSpeed = GUI.HorizontalScrollbar (new Rect (offX, y1 + 2 * offSetY, 170, 30),
-                                                hScrollbarSpeed, 0.0f, selectedSc.minVelForCourseCorrection, selectedSc.maxVelForCourseCorrection);
+		
 
-		string labelSpeed = (Mathf.Round (hScrollbarSpeed * Scales.velmu2kms * 100f) / 100f).ToString () + "km/s";
-		GUI.Label (new Rect (offX + width, y1 + 2 * offSetY - 3, 140, 30), labelSpeed);
-
-		selectedSc.angle = hScrollbarDirection;
+		
 
 		offY += offSetY;
 		if (GUI.Button (new Rect (offX, y1 + 3 * offSetY, 170, 30), "Thrust")) {
-			selectedSc.allowableNumberOfThrusts--;
-			selectedSc.Velocity += hScrollbarSpeed * (Quaternion.Euler (0, hScrollbarDirection, 0) * selectedSc.Velocity).normalized;
+
 			hScrollbarDirection = 0;
 			hScrollbarSpeed = 0;
 		}

@@ -11,7 +11,6 @@ public class AuxOrbit : MonoBehaviour
 	private Vector2 initialVel2;
 	private LineRenderer line;
 	private int lineRendererLength;
-	private SpaceCraftOrbit AdaptiveLeapfrog;
 	private GameObject earth;
 	private GameObject planet;
 	private PlanetaryOrbit poEarth;

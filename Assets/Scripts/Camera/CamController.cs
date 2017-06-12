@@ -59,14 +59,13 @@ public class CamController : MonoBehaviour
 
 	void Start ()
 	{
-		LockObject (Planet.planetList [Random.Range (0, Planet.planetList.Count - 1)].transform);
+		LockObject (Planet.planetList [2].transform);
 	}
 
 	void LateUpdate ()
 	{
 		ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		float wheel = Input.GetAxis ("Mouse ScrollWheel");
-		RaycastHit hit;
         
 		int layerMask = 1 << 9;
 		layerMask = ~layerMask;
@@ -96,11 +95,6 @@ public class CamController : MonoBehaviour
 			mode = Mode.isIdle;
 		} else if (MouseXBoarder () != 0 || MouseYBoarder () != 0) {
 			mode = Mode.isPanning;
-		} else if (wheel != 0) {
-			mode = Mode.isZooming;
-		} else if (DoubleClick (Time.time) && Physics.Raycast (ray, out hit, float.MaxValue, layerMask) == true) {
-			if (lockedTransform != hit.collider.gameObject.transform.parent.transform)
-				LockObject (hit.collider.gameObject.transform.parent.transform);
 		}
 
 		switch (mode) {
@@ -121,28 +115,6 @@ public class CamController : MonoBehaviour
 			float magnitude = (targetRotation.position - transform.position).magnitude;
 			transform.position = targetRotation.position - (transform.rotation * Vector3.forward * magnitude) + offSet;
 			targetRotation.position = targetRotation.position + offSet;            
-			break;
-            
-		case Mode.isZooming:
-            
-			if (lockedTransform != null)
-				UnlockObject ();
-
-			float s0 = LinePlaneIntersect (transform.forward, transform.position, Vector3.up, Vector2.zero, ref CamPlanePoint);
-			targetRotation.position = transform.forward * s0 + transform.position;
-			float lineToPlaneLength = LinePlaneIntersect (ray.direction, transform.position, Vector3.up, Vector2.zero, ref vectorPoint);
-                
-			if (wheel > 0) {
-				if (lineToPlaneLength > 1.1f)
-					desiredPosition = ((vectorPoint - transform.position) / 2 + transform.position);
-                    
-			} else if (wheel < 0)
-				desiredPosition = (-(targetRotation.position - transform.position) / 2 + transform.position);
-                
-			transform.position = Vector3.Lerp (transform.position, desiredPosition, zoomRate * Time.deltaTime / Time.timeScale);
-                
-			if (transform.position == desiredPosition)
-				mode = Mode.isIdle;
 			break;
             
 		case Mode.isPanning:
