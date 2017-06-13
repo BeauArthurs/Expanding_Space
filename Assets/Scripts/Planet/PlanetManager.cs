@@ -40,6 +40,8 @@ public class PlanetManager : MonoBehaviour
 	private GameObject rings;
 	private float[][] planetParameters = new float[planetNames.Length][];
 	private float[][] moonParameters = new float[moonNames.Length][];
+    [SerializeField]
+    private Ship player;
 
 	void Awake ()
 	{
@@ -151,13 +153,16 @@ public class PlanetManager : MonoBehaviour
 		rings = Instantiate (Resources.Load ("Prefabs/Rings") as GameObject) as GameObject;
 		rings.transform.parent = Planet.planetList [5].transform.Find (meshChildPrefix + "Saturn");
 		rings.transform.localScale = new Vector3 (5, 5, 5);
+        Scales.Pause = false;
+        Scales.IncreaseTimeScale();
+        player.start();
 	}
     
 	void CreatePlanet (string name, Material material, float[] par)
 	{
 		GameObject planet = Instantiate (Resources.Load ("Prefabs/PlanetHead") as GameObject) as GameObject;
 
-		planet.name = name;
+        planet.name = name;
 		planet.tag = "Planet";
 
 		planet.layer = 9;
@@ -179,7 +184,7 @@ public class PlanetManager : MonoBehaviour
 	{
 		GameObject moon = Instantiate (Resources.Load ("Prefabs/PlanetHead") as GameObject) as GameObject;
 
-		moon.name = name;
+        moon.name = name;
 		moon.tag = "Moon";
 		
 		moon.transform.Find ("Planet").name = meshChildPrefix + name;

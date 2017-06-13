@@ -61,7 +61,9 @@ public class CamController : MonoBehaviour
 	{
 		LockObject (Planet.planetList [2].transform);
 	}
-
+    public void setPlanet(int planet) {
+        LockObject(Planet.planetList[planet].transform);
+    }
 	void LateUpdate ()
 	{
 		ray = Camera.main.ScreenPointToRay (Input.mousePosition);
@@ -157,7 +159,7 @@ public class CamController : MonoBehaviour
 		off = lockedTransform.position;
 
 		targetRotation.position = lockedTransform.position;
-		transform.position = targetRotation.position - new Vector3 (1.5f * lockedTransform.localScale.x, -1.5f * lockedTransform.localScale.x, 0);
+		transform.position = targetRotation.position - new Vector3 (3f * lockedTransform.localScale.x, -3f * lockedTransform.localScale.x, 0);
 	}
 
 	private void UnlockObject ()
