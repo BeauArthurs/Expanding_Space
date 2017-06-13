@@ -72,42 +72,42 @@ public class PlanetsInformation : MonoBehaviour
 
     private void Start()
     {
-        SetInfo(Planets.EARTH);
+        SetInfo(2);
     }
 
-    public void SetInfo(Planets planet)
+    public void SetInfo(int planet)
     {
         switch (planet)
         {
-            case Planets.MERCURY:
+            case 0:
                 currentSprite = sprites[0];
                 currentInfo = mercuryInfo;
                 break;
-            case Planets.VENUS:
+            case 1:
                 currentSprite = sprites[1];
                 currentInfo = venusInfo;
                 break;
-            case Planets.EARTH:
+            case 2:
                 currentSprite = sprites[2];
                 currentInfo = earthInfo;
                 break;
-            case Planets.MARS:
+            case 3:
                 currentSprite = sprites[3];
                 currentInfo = marsInfo;
                 break;
-            case Planets.JUPITER:
+            case 4:
                 currentSprite = sprites[4];
                 currentInfo = jupiterInfo;
                 break;
-            case Planets.SATURN:
+            case 5:
                 currentSprite = sprites[5];
                 currentInfo = saturnInfo;
                 break;
-            case Planets.URANUS:
+            case 6:
                 currentSprite = sprites[6];
                 currentInfo = uranusInfo;
                 break;
-            case Planets.NEPTUNE:
+            case 7:
                 currentSprite = sprites[7];
                 currentInfo = neptuneInfo;
                 break;
