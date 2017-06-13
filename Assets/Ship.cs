@@ -5,23 +5,26 @@ using UnityEngine;
 public class Ship : MonoBehaviour {
 
     private Planet currentPlanet;
-    private CamController cam;
+    private Planet destinationPlanet;
     private bool moving;
     private Vector3 offset;
     private float speed;
     private bool started;
+
+    [SerializeField] private GameObject scanButton;
+    [SerializeField] private CameraOrbit cam;
+
 	void Awake () {
         
-        cam = Camera.main.gameObject.GetComponent<CamController>();
-        offset = Vector3.up * 5;
-        started = false;
+        offset = Vector3.up * 2;
         moving = false;
         speed = 5;
     }
-    public void start() {
+
+    public void Initiate() {
         currentPlanet = Planet.planetList[2];
         transform.position = currentPlanet.transform.position;
-        
+        cam.target = currentPlanet.transform;
         started = true;
     }
 
@@ -34,23 +37,42 @@ public class Ship : MonoBehaviour {
             }
             else
             {
-                transform.position = Vector3.MoveTowards(transform.position, currentPlanet.transform.position, speed);
-                if (Vector3.Distance(transform.position, currentPlanet.transform.position) < .5)
+                if (destinationPlanet != null) {
+                    MoveToPlanet(destinationPlanet);
+                }
+                if (Vector3.Distance(transform.position, destinationPlanet.transform.position) < .5)
                 {
-                    moving = false;
-                    cam.LockObject(currentPlanet.transform);
+                    SetCurrentPlanet(destinationPlanet);
                 }
             }
         }
 	}
 
-    public void SetCurrentPlanet(int planet) {
-        if (Planet.planetList[planet] != currentPlanet)
+    private void MoveToPlanet(Planet dest) {
+        float dist = Vector3.Distance(transform.position, dest.transform.position);
+        transform.position = Vector3.MoveTowards(transform.position, dest.transform.position, speed + (dist/1000));
+    }
+
+    public void SetCurrentPlanet(Planet p) {
+        if (p != currentPlanet)
         {
-            currentPlanet = Planet.planetList[planet];
-            moving = true;
-            cam.LockObject(this.transform);
+            currentPlanet = p;
+            cam.target = currentPlanet.transform;
+            offset = Vector3.up * (currentPlanet.transform.localScale.x + 1);
+            moving = false;
+            scanButton.SetActive(true);
         }
-        
+    }
+
+    public void SetDestinationPlanet(int planetIndex)
+    {
+        if (Planet.planetList[planetIndex] != currentPlanet)
+        {
+            currentPlanet = null;
+            destinationPlanet = Planet.planetList[planetIndex];
+            cam.target = this.transform;
+            moving = true;
+            scanButton.SetActive(false);
+        }
     }
 }

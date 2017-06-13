@@ -9,7 +9,7 @@ public class MeshPlanet : MonoBehaviour
 
 	void Start ()
 	{
-		thresDist = 80;
+		thresDist = 210;
 
 		gameObject.AddComponent<SphereCollider> ();
 		transform.GetComponent<SphereCollider> ().radius = 1;
