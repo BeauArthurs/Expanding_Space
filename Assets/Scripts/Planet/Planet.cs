@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class Planet : MonoBehaviour
@@ -36,9 +35,6 @@ public class Planet : MonoBehaviour
 			gameObject.GetComponent<Rigidbody> ().mass = Scales.massScale * po.Par [7];
 
 		planetCameraDistance = (Camera.main.transform.position - transform.position).magnitude;
-		//sphereCollider
-		//Scales.massScale * par[7]
-		//Scales.gravityColliderMult * Scales.massScale * par[7]
 	}
 
 	private void OnDestroy ()

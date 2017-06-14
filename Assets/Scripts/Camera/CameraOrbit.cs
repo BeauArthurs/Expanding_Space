@@ -4,7 +4,6 @@ using System.Collections;
 [AddComponentMenu("Camera-Control/Mouse Orbit with zoom")]
 public class CameraOrbit : MonoBehaviour
 {
-
     public Transform target;
     public float distance = 5.0f;
     public float xSpeed = 120.0f;
@@ -19,14 +18,11 @@ public class CameraOrbit : MonoBehaviour
     float x = 0.0f;
     float y = 0.0f;
 
-    // Use this for initialization
     void Start()
     {
         Vector3 angles = transform.eulerAngles;
         x = angles.y;
         y = angles.x;
-
-        // Make the rigid body not change rotation
     }
 
     void LateUpdate()
